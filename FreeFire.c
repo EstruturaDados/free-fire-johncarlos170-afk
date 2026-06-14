@@ -20,25 +20,25 @@ struct iten{
 };
 
 
-int valor=0;
-char* texto[MAX_STR_ITEN];
+int quant_inten;
+char texto[MAX_STR_ITEN];
 
 
 void inserirLista(struct iten *mochila){
-    if (valor == TAM_MAX){
+    if (quant_inten == TAM_MAX){
         printf("mochila cheia\n");
         return;
     }else{
      printf("Adicionar novo iten:");
-     fgets(mochila[valor].dados,MAX_STR_ITEN,stdin);
+     fgets(mochila[quant_inten].dados,MAX_STR_ITEN,stdin);
      printf("Tipo do iten(arma,municao,cura,etc.):");
-     fgets(mochila[valor].tipo,MAX_STR_TIPO,stdin);
+     fgets(mochila[quant_inten].tipo,MAX_STR_TIPO,stdin);
      printf("Digite a quantidade:");
-     scanf("%d",&mochila[valor].quantidade);
+     scanf("%d",&mochila[quant_inten].quantidade);
 
      printf("iten adicionado na mochila\n");
 
-     valor++;
+     quant_inten++;
   
     }
 }
@@ -47,8 +47,9 @@ void removerIten(struct iten *mochila,char* texto){
     int i, pos = -1;
     printf("Digite o nome do item que deseja remover:");
     fgets(texto,MAX_STR_ITEN,stdin);
+    
 
-    for(i=0; i< valor; i++){
+    for(i=0; i< quant_inten; i++){
         if (strcmp(mochila[i].dados,texto)==0){
         pos =i;
         break;
@@ -58,10 +59,10 @@ void removerIten(struct iten *mochila,char* texto){
     printf("Erro iten %s nao encontrado\n",texto);
     return;
  }
- for(i=pos;i<valor-1;i++){
+ for(i=pos;i<quant_inten-1;i++){
     strcpy(mochila[i].dados,mochila[i+1].dados);
  }
- valor--;
+ quant_inten--;
  printf("iten removido com sucesso\n");
 
 
@@ -69,11 +70,11 @@ void removerIten(struct iten *mochila,char* texto){
 
 void listariten(struct iten *mochila){
 
-    if(valor==0){
+    if(quant_inten==0){
         printf("lista vazia\n");
-    return; }
+     }
               printf("Itens na mochila\n");
-    for (int i=0; i< valor; i++){
+    for (int i=0; i<quant_inten; i++){
         
         printf("------------------------------------------\n");
         printf(" Nome: %s \n", mochila[i].dados);
@@ -81,8 +82,35 @@ void listariten(struct iten *mochila){
         printf("quantidade: %d\n",mochila[i].quantidade);
         printf("------------------------------------------\n");
     }
-
+printf("pressione enter....");
+getchar();
 }
+void buscarIten(struct iten *mochila,char* texto){
+
+    printf("----Buscar Item na Mochila---\n");
+    printf("Digite o nome do intem que deseja buscar:");
+     fgets(texto,MAX_STR_ITEN,stdin);
+    
+    
+    for(int i=0; i<quant_inten;i++){
+        if(strcmp(mochila[i].dados,texto)==0){
+        
+        printf("----Iten Encontrado!---\n");
+        printf("Nome:%s\n",mochila[i].dados);
+        printf("Tipo:%s\n",mochila[i].tipo);
+        printf("quantidade:%d\n",mochila[i].quantidade);
+        printf("------------------------\n");
+        printf("pressione enter.........");
+        getchar();
+        }else{
+            printf("item %s nao encontrado na mochila\n",texto);
+            printf("pressione enter");
+            getchar();
+        }
+    }
+    
+}
+
 void  limparBufferEntrada(){
   int c;
   while ((c = getchar()) != '\n' && c != EOF);
@@ -99,12 +127,13 @@ do{
     printf("===============================\n");
     printf("   MOCHILA DE SOBREVIVENCIA\n");
     printf("===============================\n");
-    printf("Itens da Mochila: %d/10\n",valor);
+    printf("Itens da Mochila: %d/10\n",quant_inten);
     printf("\n");
 
     printf("1. Adicionar Iten\n");
     printf("2. Remover Iten\n");
     printf("3. Listar Itens na mochila\n");
+    printf("4. Buscar Item por nome\n");
     printf("0. Sair\n");
     printf("----------------------------------\n");
     printf("Escolha uma opcao:");
@@ -117,11 +146,16 @@ do{
         inserirLista(mochila);
         break;
         case 2:
-          removerIten(mochila, texto);
+        removerIten(mochila,texto);
         break;
         case 3:
         listariten(mochila);
         break;
+
+        case 4:
+        buscarIten(mochila,texto);
+        break;
+
         case 0:
         printf("Saindo do sistema\n");
         break;
